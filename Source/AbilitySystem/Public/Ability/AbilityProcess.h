@@ -21,17 +21,10 @@ class ABILITYSYSTEM_API UAbilityProcess : public UProcessTask
 	GENERATED_BODY()
 
 public:
-	void OnInit(TMap<FName, FAttributeName> AttributeNameList);
 	static UAbilityProcess* ActivateProcess(UProcessTask* ParentTask, TSubclassOf<UAbilityProcess>AbilityProcessClass, TMap<FName, FAttributeName> ProcessParam, FOnAbilityProcessComplete InOnAbilityProcessComplete);
 
 	UFUNCTION(BlueprintCallable, Category = "AbilityProcess",meta = (BlueprintInternalUseOnly = "TRUE"))
 		static UAbilityProcess* ActivateProcess(UProcessTask* ParentTask,TSubclassOf<UAbilityProcess>AbilityProcessClass, TMap<FName, FAttributeName> ProcessParam);
-
-	UFUNCTION(BlueprintImplementableEvent, Category = "AbilityProcess")
-		void OnProcessActivate(FTaskParams TaskParams);
-
-	UFUNCTION(BlueprintImplementableEvent, Category = "AbilityProcess")
-		void OnProcessFinish(bool bSuccess);
 
 	UFUNCTION(BlueprintCallable,meta = (AdvancedDisplay = "Result"), Category = "AbilityProcess")
 		virtual void FinishProcess(bool bSuccess, uint8 Result = 0);
@@ -43,8 +36,4 @@ public:
 		FAbilityProcessDelegate OnAbilityProcessFail;
 
 	FOnAbilityProcessComplete OnAbilityProcessComplete;
-
-private:
-	TMap<FName, FAttributes> InAttributesList;
-
 };

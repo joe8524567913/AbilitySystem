@@ -17,18 +17,22 @@ class ABILITYSYSTEM_API UProcessTask : public UTaskBase
 	GENERATED_BODY()
 
 public:
-	virtual void CompleteTask() override;
 	virtual void Interrupt();
-	virtual void OnInterrupt();
-	void EndSubTasks();
 
 protected:
+	virtual void OnEnded() override;
+	virtual void OnInterrupt();
+
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnInterrupt"), Category = "Ability")
 		void K2_OnInterrupt();
+
+private:
+	void EndSubTasks();
+
 };
 
 template<typename TaskType>
-FORCEINLINE TaskType * NewAbilityTask(UObject* Outer,AActor* Caster, UAbilityBlackBoard* AbilityBlackBoard,UClass* Class,FName Name = NAME_None)
+FORCEINLINE TaskType * NewAbilityTask(UObject* Outer,UClass* Class,FName Name = NAME_None)
 {
 	TaskType* NewAbilityTask = NewObject<TaskType>(Outer, Class, Name);
 	if (!NewAbilityTask)
@@ -40,6 +44,5 @@ FORCEINLINE TaskType * NewAbilityTask(UObject* Outer,AActor* Caster, UAbilityBla
 		ParentTask->AddToSubTaskMap(NewAbilityTask);
 		NewAbilityTask->SetParentTask(ParentTask);
 	}
-	NewAbilityTask->Init(Caster, AbilityBlackBoard);
 	return NewAbilityTask;
 }

@@ -17,20 +17,17 @@ class ABILITYSYSTEM_API UEffectTask : public UTaskBase
 	GENERATED_BODY()
 
 public:
-	void InitEffectTask(AActor* InCaster,UAbilityBlackBoard* InAbilityBlackBoard,FEffectInfo InEffectInfo);
+	FORCEINLINE void SetEffectInfo(FEffectInfo InEffectInfo) { EffectInfo = InEffectInfo; }
 
 protected:
+	virtual void OnActivate() override;
+	virtual void OnEnded() override;
+
 	UFUNCTION(BlueprintCallable, Category = "EffectTask")
 		void EndEffectTask();
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "EffectTask")
-		void OnEffectActivate(FTaskParams TaskParams);
-
-	UFUNCTION(BlueprintImplementableEvent, Category = "EffectTask")
 		void OnTimePointActivate();
-
-	UFUNCTION(BlueprintImplementableEvent, Category = "EffectTask")
-		void OnEnd();
 
 private:
 	void LifeCountdown();

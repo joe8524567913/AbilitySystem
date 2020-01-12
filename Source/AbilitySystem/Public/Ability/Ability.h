@@ -35,15 +35,15 @@ class ABILITYSYSTEM_API UAbility : public UProcessTask
 	GENERATED_BODY()
 
 public:
-	virtual void OnAbilityActivate();
-	virtual void OnAbilityEnd();
-	virtual void OnInterrupt() override;
-	virtual void Interrupt() override;
 	FORCEINLINE bool IsActivate() { return bActivate; }
 
 	FOnAbilityComplete OnAbilityComplete;
 
 protected:
+	virtual void OnActivate() override;
+	virtual void OnEnded() override;
+	virtual void OnInterrupt() override;
+
 	virtual UAbilityProcess* ActivateProcess();
 	virtual void ActivateAbilityProcessSequence();
 
@@ -55,12 +55,6 @@ protected:
 
 	UFUNCTION(BlueprintCallable, meta = (DisplayName = "ActivateAbilityProcessSequence"), Category = "Ability")
 		void K2_ActivateAbilityProcessSequence();
-
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnAbilityActivate"), Category = "Ability")
-		void K2_OnAbilityActivate();
-
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnAbilityEnd"), Category = "Ability")
-		void K2_OnAbilityEnd();
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Process")
 		bool bAutoActivateAbilitySequence = true;

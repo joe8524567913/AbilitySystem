@@ -42,7 +42,12 @@ void UAbilityComponent::RegisterAbility(TSubclassOf<UAbility> AbilityClass)
 	{
 		return;
 	}
-	AbilityMap.Add(AbilityClass->GetFullName(), NewAbilityTask<UAbility>(this, GetOwner(), RegisterAbilityBlackBoard(), AbilityClass));
+	if (UAbility* InAbility = NewAbilityTask<UAbility>(this, AbilityClass))
+	{
+		FTaskParams InTaskParams;
+		InAbility->Init(GetOwner(), RegisterAbilityBlackBoard(), InTaskParams);
+		AbilityMap.Add(AbilityClass->GetFullName(), InAbility);
+	}
 }
 
 void UAbilityComponent::UnRegisterAbility(TSubclassOf<UAbility> AbilityClass)
@@ -75,7 +80,7 @@ UAbility * UAbilityComponent::ActivateAbility(TSubclassOf<UAbility> AbilityClass
 	{
 		CurrentAbility->OnAbilityComplete.Clear();
 		CurrentAbility->OnAbilityComplete.AddDynamic(this, &UAbilityComponent::OnCurrentAbilityComplete);
-		CurrentAbility->OnAbilityActivate();
+		CurrentAbility->FinishInit();
 		return CurrentAbility;
 	}
 	return nullptr;

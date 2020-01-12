@@ -10,10 +10,12 @@ UAbilityProcess * UAbilityProcess::ActivateProcess(UProcessTask * ParentTask, TS
 		return nullptr;
 	}
 
-	if (UAbilityProcess* AbilityProcess = NewAbilityTask<UAbilityProcess>(ParentTask, ParentTask->GetCaster(), ParentTask->GetAbilityBlackBoard(), AbilityProcessClass))
+	if (UAbilityProcess* AbilityProcess = NewAbilityTask<UAbilityProcess>(ParentTask, AbilityProcessClass))
 	{
 		AbilityProcess->OnAbilityProcessComplete = InOnAbilityProcessComplete;
-		AbilityProcess->OnInit(ProcessParam);
+		FTaskParams InTaskParams;
+		AbilityProcess->Init(ParentTask->GetCaster(), ParentTask->GetAbilityBlackBoard(), InTaskParams);
+		AbilityProcess->FinishInit();
 		return AbilityProcess;
 	}
 	return nullptr;
@@ -26,9 +28,12 @@ UAbilityProcess* UAbilityProcess::ActivateProcess(UProcessTask* ParentTask, TSub
 		return nullptr;
 	}
 	
-	if (UAbilityProcess* AbilityProcess = NewAbilityTask<UAbilityProcess>(ParentTask, ParentTask->GetCaster(), ParentTask->GetAbilityBlackBoard(), AbilityProcessClass))
+	if (UAbilityProcess* AbilityProcess = NewAbilityTask<UAbilityProcess>(ParentTask, AbilityProcessClass))
 	{
-		AbilityProcess->OnInit(ProcessParam);
+		FTaskParams InTaskParams;
+		InTaskParams.Params = ProcessParam;
+		AbilityProcess->Init(ParentTask->GetCaster(), ParentTask->GetAbilityBlackBoard(), InTaskParams);
+		AbilityProcess->FinishInit();
 		return AbilityProcess;
 	}
 	return nullptr;
@@ -36,7 +41,6 @@ UAbilityProcess* UAbilityProcess::ActivateProcess(UProcessTask* ParentTask, TSub
 
 void UAbilityProcess::FinishProcess(bool bSuccess, uint8 Result)
 {
-	OnProcessFinish(bSuccess);
 	if (bSuccess)
 	{
 		OnAbilityProcessSuccess.Broadcast(Result);
@@ -47,12 +51,5 @@ void UAbilityProcess::FinishProcess(bool bSuccess, uint8 Result)
 	}
 	OnAbilityProcessComplete.ExecuteIfBound(bSuccess);
 	OnAbilityProcessComplete.Unbind();
-	CompleteTask();
-}
-
-void UAbilityProcess::OnInit(TMap<FName, FAttributeName> AttributeNameList)
-{
-	FTaskParams TaskParams;
-	TaskParams.Params = AttributeNameList;
-	OnProcessActivate(TaskParams);
+	FinishTask();
 }

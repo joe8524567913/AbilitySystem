@@ -58,9 +58,9 @@ class ABILITYSYSTEM_API UTaskBase : public UGameplayTask
 	GENERATED_BODY()
 
 public:
-	static UTaskBase* NewTaskBase();
-	virtual void Init(AActor* Caster, UAbilityBlackBoard* AbilityBlackBoard);
-	virtual void CompleteTask() {};
+	void Init(AActor* Caster, UAbilityBlackBoard* AbilityBlackBoard, FTaskParams InTaskParams);
+	void FinishInit();
+	void FinishTask(bool bKill = false);
 	virtual UWorld* GetWorld() const override { return Caster ? Caster->GetWorld() : nullptr; }
 
 	FORCEINLINE void AddToSubTaskMap(UTaskBase* Task) { SubTaskMap.Add(Task->GetFName(), Task); }
@@ -79,20 +79,32 @@ public:
 
 
 protected:
-	TArray<FEffectInfo> FindEffectInfo(const FEffectSlot EffectSlot);
+	virtual void OnActivate() {};
+	virtual void OnEnded() {}
+
+	UFUNCTION(BlueprintImplementableEvent,meta = (DisplayName = "OnActivate"), Category = "AbilityProcess")
+		void K2_OnActivate(FTaskParams InTaskParams);
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnEnded"), Category = "AbilityProcess")
+		void K2_OnEnded();
 
 	UFUNCTION(BlueprintPure, Category = "Task")
-		FAttributes GetAttributes(FTaskParams TaskParams, FName ParamName);
+		FAttributes GetAttributes(FTaskParams InTaskParams, FName ParamName);
 
+	TArray<FEffectInfo> FindEffectInfo(const FEffectSlot EffectSlot);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Effect")
 		TArray<FEffectInfo> EffectList;
 
+	UPROPERTY()
+		AActor* Caster;
+
 	UTaskBase* ParentTask;
+	FTaskParams TaskParams;
 	TMap<FName, UTaskBase*> SubTaskMap;
-	AActor* Caster;
 	UAbilityBlackBoard* AbilityBlackBoard;
+
 
 
 private:

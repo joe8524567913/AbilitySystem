@@ -1,29 +1,26 @@
 {
-  "FileVersion": 3,
-  "Version": 1,
-  "VersionName": "1.0",
-  "FriendlyName": "AbilitySystem",
-  "Description": "",
-  "Category": "AbilitySystem",
-  "CreatedBy": "ChengXinYuan",
-  "CreatedByURL": "",
-  "DocsURL": "",
-  "MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/649004bac8614fa3a3274536a32bf576",
-  "SupportURL": "",
-  "CanContainContent": true,
-  "IsBetaVersion": false,
-  "Installed": false,
-  "EnabledByDefault": true,
-  "EngineVersion": "4.24.0",
-
-  "Modules": [
-    {
-      "Name": "AbilitySystem",
-      "Type": "Runtime",
-      "LoadingPhase": "PreDefault",
-      "WhitelistPlatforms": [
-        "Win64"
-      ]
-    }
-  ]
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "AbilitySystem",
+	"Description": "",
+	"Category": "AbilitySystem",
+	"CreatedBy": "ChengXinYuan",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/content/649004bac8614fa3a3274536a32bf576",
+	"SupportURL": "",
+	"EngineVersion": "4.24.0",
+	"CanContainContent": true,
+	"Installed": true,
+	"Modules": [
+		{
+			"Name": "AbilitySystem",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault",
+			"WhitelistPlatforms": [
+				"Win64"
+			]
+		}
+	]
 }

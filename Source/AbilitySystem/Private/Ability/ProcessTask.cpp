@@ -4,16 +4,15 @@
 
 #include "Ability/ProcessTask.h"
 
-void UProcessTask::CompleteTask()
+void UProcessTask::OnEnded()
 {
 	EndSubTasks();
-	EndTask();
 }
 
 void UProcessTask::Interrupt()
 {
 	OnInterrupt();
-	CompleteTask();
+	FinishTask();
 }
 
 void UProcessTask::OnInterrupt()
@@ -27,7 +26,7 @@ void UProcessTask::EndSubTasks()
 	{
 		if (UTaskBase* TaskBase = Iter->Value)
 		{
-			TaskBase->CompleteTask();
+			TaskBase->FinishTask();
 		}
 	}
 	SubTaskMap.Empty();

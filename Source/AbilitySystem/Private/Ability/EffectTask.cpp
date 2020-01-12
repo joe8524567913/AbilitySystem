@@ -6,15 +6,8 @@
 #include "TimerManager.h"
 #include "Engine/World.h"
 
-void UEffectTask::InitEffectTask(AActor* InCaster, UAbilityBlackBoard* InAbilityBlackBoard, FEffectInfo InEffectInfo)
+void UEffectTask::OnActivate()
 {
-	Init(InCaster, InAbilityBlackBoard);
-	EffectInfo = InEffectInfo;
-
-	FTaskParams TaskParams;
-	TaskParams.Params = EffectInfo.AttributeNameList;
-	OnEffectActivate(TaskParams);
-
 	LifeCountdown();
 	if (EffectInfo.bTimePoints)
 	{
@@ -27,24 +20,25 @@ void UEffectTask::InitEffectTask(AActor* InCaster, UAbilityBlackBoard* InAbility
 	}
 }
 
-void UEffectTask::EndEffectTask()
+void UEffectTask::OnEnded()
 {
 	if (UWorld* InWorld = Caster->GetWorld())
 	{
 		InWorld->GetTimerManager().ClearTimer(IntervalHandle);
 		InWorld->GetTimerManager().ClearTimer(LifeHandle);
 	}
-
-	OnEnd();
-	EndTask();
 }
 
 void UEffectTask::LifeCountdown()
 {
-	if (Caster)
+	if (!Caster)
+	{
+		return;
+	}
+	if (const UWorld* InWorld = Caster->GetWorld())
 	{
 		FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &UEffectTask::EndEffectTask);
-		Caster->GetWorld()->GetTimerManager().SetTimer(LifeHandle, TimerDelegate, EffectInfo.Life, false);
+		InWorld->GetTimerManager().SetTimer(LifeHandle, TimerDelegate, EffectInfo.Life, false);
 	}
 }
 
@@ -72,7 +66,7 @@ void UEffectTask::ActivateTimePoints(int CurrentIndex)
 	}
 	else
 	{
-		OnEnd();
+		FinishTask();
 	}
 }
 
@@ -80,4 +74,9 @@ void UEffectTask::OnTimePointsReached(int CurrentIndex)
 {
 	OnTimePointActivate();
 	ActivateTimePoints(CurrentIndex + 1);
+}
+
+void UEffectTask::EndEffectTask()
+{
+	FinishTask();
 }

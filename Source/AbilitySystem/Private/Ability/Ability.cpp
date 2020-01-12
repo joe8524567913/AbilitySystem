@@ -5,22 +5,21 @@
 #include "Ability/Ability.h"
 #include "Ability/AbilityProcess.h"
 
-void UAbility::OnAbilityActivate()
+void UAbility::OnActivate()
 {
 	bActivate = true;
-	K2_OnAbilityActivate();
 	if (bAutoActivateAbilitySequence)
 	{
 		ActivateAbilityProcessSequence();
 	}
 }
 
-void UAbility::OnAbilityEnd()
+void UAbility::OnEnded()
 {
+	Super::OnEnded();
 	ResetAbiity();
 	ClearCurrentProcess();
 	OnAbilityComplete.Broadcast();
-	K2_OnAbilityEnd();
 }
 
 void UAbility::OnInterrupt()
@@ -30,17 +29,9 @@ void UAbility::OnInterrupt()
 	K2_OnInterrupt();
 }
 
-void UAbility::Interrupt()
-{
-	OnInterrupt();
-	EndSubTasks();
-}
-
 void UAbility::EndAbility()
 {
-	GetCaster();
-	OnAbilityEnd();
-	EndSubTasks();
+	FinishTask(false);
 }
 
 void UAbility::K2_ActivateAbilityProcessSequence()

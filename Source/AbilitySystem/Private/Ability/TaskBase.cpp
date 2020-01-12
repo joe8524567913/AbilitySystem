@@ -5,10 +5,27 @@
 #include "Ability/TaskBase.h"
 #include "Ability/EffectTask.h"
 
-void UTaskBase::Init(AActor* InCaster, UAbilityBlackBoard* InAbilityBlackBoard)
+void UTaskBase::Init(AActor* InCaster, UAbilityBlackBoard* InAbilityBlackBoard, FTaskParams InTaskParams)
 {
 	Caster = InCaster;
 	AbilityBlackBoard = InAbilityBlackBoard;
+	TaskParams = InTaskParams;
+}
+
+void UTaskBase::FinishInit()
+{
+	OnActivate();
+	K2_OnActivate(TaskParams);
+}
+
+void UTaskBase::FinishTask(bool bKill)
+{
+	K2_OnEnded();
+	OnEnded();
+	if (bKill)
+	{
+		EndTask();
+	}
 }
 
 void UTaskBase::ActivateEffectTask(FEffectSlot EffectSlot)
@@ -25,7 +42,11 @@ void UTaskBase::ActivateEffectTask(FEffectSlot EffectSlot)
 				{
 					if (UEffectTask* EffectTask = NewObject<UEffectTask>(GetCaster(), EffectInfo.EffectClass))
 					{
-						EffectTask->InitEffectTask(Caster,AbilityBlackBoard,EffectInfo);
+						FTaskParams InTaskParams;
+						InTaskParams.Params = EffectInfo.AttributeNameList;
+						EffectTask->Init(Caster, AbilityBlackBoard, InTaskParams);
+						EffectTask->SetEffectInfo(EffectInfo);
+						EffectTask->FinishInit();
 					}
 				}
 				
@@ -48,10 +69,10 @@ TArray<FEffectInfo> UTaskBase::FindEffectInfo(const FEffectSlot EffectSlot)
 	return EffectInfoList;
 }
 
-FAttributes UTaskBase::GetAttributes(FTaskParams TaskParams, FName ParamName)
+FAttributes UTaskBase::GetAttributes(FTaskParams InTaskParams, FName ParamName)
 {
 	TMap<FName, FAttributes> InAttributesList;
-	AttributeNameListConvertToAttributesList(TaskParams.Params, InAttributesList);
+	AttributeNameListConvertToAttributesList(InTaskParams.Params, InAttributesList);
 	return *InAttributesList.Find(ParamName);
 }
 
