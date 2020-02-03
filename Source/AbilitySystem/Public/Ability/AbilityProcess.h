@@ -16,7 +16,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityProcessDelegate, uint8, Result);
 
 UCLASS(Blueprintable)
-class ABILITYSYSTEM_API UAbilityProcess : public UProcessTask
+class UAbilityProcess : public UProcessTask
 {
 	GENERATED_BODY()
 

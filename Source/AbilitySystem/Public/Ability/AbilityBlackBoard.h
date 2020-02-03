@@ -57,7 +57,7 @@ public:
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_ThreeParams(FOnAttributeChange, FAttributeName, AttributeName, FAttributes, LastAttribute, FAttributes, NewAttribute);
 
 UCLASS(Blueprintable)
-class ABILITYSYSTEM_API UAbilityBlackBoard : public UDataAsset
+class UAbilityBlackBoard : public UDataAsset
 {
 	GENERATED_BODY()
 		
@@ -92,7 +92,7 @@ public:
 	FORCEINLINE TArray<FName> GetEffectSlotList() { return EffectSlotList; }
 	FORCEINLINE FAttributes FindAttribute(FAttributeName AttributeName) { return *AttributesList.Find(AttributeName.Attribute); }
 	FORCEINLINE void AddAttributes(FAttributeName AttributeName, FAttributes Attributes) { AttributesList.Add(AttributeName.Attribute, Attributes); }
-	FORCEINLINE void AddAttributesByProperty(FAttributeName AttributeName, UProperty* Property, void * PropertyAddress,bool bCallBack = false);
+	void AddAttributesByProperty(FAttributeName AttributeName, UProperty* Property, void * PropertyAddress,bool bCallBack = false);
 	template<typename ValueType, typename PropertyType>ValueType GetAttribute(FAttributeName AttributeName, bool& bSuccess);
 
 protected:

@@ -6,27 +6,21 @@
 
 void UProcessTask::OnEnded()
 {
-	EndSubTasks();
-}
-
-void UProcessTask::Interrupt()
-{
-	OnInterrupt();
-	FinishTask();
+	EndSubTasks(false);
 }
 
 void UProcessTask::OnInterrupt()
 {
-	K2_OnInterrupt();
+	EndSubTasks(true);
 }
 
-void UProcessTask::EndSubTasks()
+void UProcessTask::EndSubTasks(bool bInterrupt)
 {
 	for (TMap<FName, UTaskBase*>::TConstIterator Iter = SubTaskMap.CreateConstIterator(); Iter; ++Iter)
 	{
 		if (UTaskBase* TaskBase = Iter->Value)
 		{
-			TaskBase->FinishTask();
+			TaskBase->FinishTask(bInterrupt,true);
 		}
 	}
 	SubTaskMap.Empty();

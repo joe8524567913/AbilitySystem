@@ -51,5 +51,5 @@ void UAbilityProcess::FinishProcess(bool bSuccess, uint8 Result)
 	}
 	OnAbilityProcessComplete.ExecuteIfBound(bSuccess);
 	OnAbilityProcessComplete.Unbind();
-	FinishTask();
+	FinishTask(false,true);
 }

@@ -53,14 +53,14 @@ struct FEffectInfo
 };
 
 UCLASS()
-class ABILITYSYSTEM_API UTaskBase : public UGameplayTask
+class UTaskBase : public UGameplayTask
 {
 	GENERATED_BODY()
 
 public:
 	void Init(AActor* Caster, UAbilityBlackBoard* AbilityBlackBoard, FTaskParams InTaskParams);
 	void FinishInit();
-	void FinishTask(bool bKill = false);
+	void FinishTask(bool bInterrupt = false,bool bKill = false);
 	virtual UWorld* GetWorld() const override { return Caster ? Caster->GetWorld() : nullptr; }
 
 	FORCEINLINE void AddToSubTaskMap(UTaskBase* Task) { SubTaskMap.Add(Task->GetFName(), Task); }
@@ -81,12 +81,16 @@ public:
 protected:
 	virtual void OnActivate() {};
 	virtual void OnEnded() {}
+	virtual void OnInterrupt() {};
 
-	UFUNCTION(BlueprintImplementableEvent,meta = (DisplayName = "OnActivate"), Category = "AbilityProcess")
+	UFUNCTION(BlueprintImplementableEvent,meta = (DisplayName = "OnActivate"), Category = "TaskBase")
 		void K2_OnActivate(FTaskParams InTaskParams);
 
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnEnded"), Category = "AbilityProcess")
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnEnded"), Category = "TaskBase")
 		void K2_OnEnded();
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnInterrupt"), Category = "TaskBase")
+		void K2_OnInterrupt();
 
 	UFUNCTION(BlueprintPure, Category = "Task")
 		FAttributes GetAttributes(FTaskParams InTaskParams, FName ParamName);

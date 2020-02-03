@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class ABILITYSYSTEM_API UAbilityBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
+class UAbilityBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 

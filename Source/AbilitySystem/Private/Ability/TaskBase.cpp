@@ -18,10 +18,18 @@ void UTaskBase::FinishInit()
 	K2_OnActivate(TaskParams);
 }
 
-void UTaskBase::FinishTask(bool bKill)
+void UTaskBase::FinishTask(bool bInterrupt, bool bKill)
 {
-	K2_OnEnded();
-	OnEnded();
+	if (bInterrupt)
+	{
+		K2_OnInterrupt();
+		OnInterrupt();
+	}
+	else
+	{
+		K2_OnEnded();
+		OnEnded();
+	}
 	if (bKill)
 	{
 		EndTask();

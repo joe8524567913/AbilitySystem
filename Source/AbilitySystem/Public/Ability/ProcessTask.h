@@ -12,22 +12,16 @@
  * 
  */
 UCLASS()
-class ABILITYSYSTEM_API UProcessTask : public UTaskBase
+class UProcessTask : public UTaskBase
 {
 	GENERATED_BODY()
 
-public:
-	virtual void Interrupt();
-
 protected:
 	virtual void OnEnded() override;
-	virtual void OnInterrupt();
-
-	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnInterrupt"), Category = "Ability")
-		void K2_OnInterrupt();
+	virtual void OnInterrupt()override;
 
 private:
-	void EndSubTasks();
+	void EndSubTasks(bool bInterrupt = false);
 
 };
 

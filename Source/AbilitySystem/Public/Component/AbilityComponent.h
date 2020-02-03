@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityEnded);
 
 
 UCLASS(BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class ABILITYSYSTEM_API UAbilityComponent : public UActorComponent
+class UAbilityComponent : public UActorComponent
 {
 	GENERATED_BODY()
 

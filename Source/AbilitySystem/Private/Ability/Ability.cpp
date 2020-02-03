@@ -17,21 +17,21 @@ void UAbility::OnActivate()
 void UAbility::OnEnded()
 {
 	Super::OnEnded();
-	ResetAbiity();
-	ClearCurrentProcess();
+	ClearCurrentProcess(false);
 	OnAbilityComplete.Broadcast();
+	ResetAbiity();
 }
 
 void UAbility::OnInterrupt()
 {
+	Super::OnInterrupt();
+	ClearCurrentProcess(true);
 	ResetAbiity();
-	ClearCurrentProcess();
-	K2_OnInterrupt();
 }
 
 void UAbility::EndAbility()
 {
-	FinishTask(false);
+	FinishTask(false,false);
 }
 
 void UAbility::K2_ActivateAbilityProcessSequence()
@@ -41,10 +41,6 @@ void UAbility::K2_ActivateAbilityProcessSequence()
 
 UAbilityProcess* UAbility::ActivateProcess()
 {
-	if (!bContinue)
-	{
-		return nullptr;
-	}
 	FProcessSequenceInfo ProcessSequenceInfo = GetNextProcessSequenceInfo();
 	if (ProcessSequenceInfo.IsValid())
 	{
@@ -75,7 +71,7 @@ void UAbility::ActivateAbilityProcessSequence()
 
 void UAbility::OnAbilityProcessComplete(bool bSuccess)
 {
-	ClearCurrentProcess();
+	ClearCurrentProcess(false);
 	if (bSuccess)
 	{
 		ActivateAbilityProcessSequence();
@@ -94,12 +90,15 @@ FProcessSequenceInfo UAbility::GetNextProcessSequenceInfo()
 void UAbility::ResetAbiity()
 {
 	bActivate = false;
-	bContinue = true;
 	CurrentProcessIndex = 0;
 }
 
-void UAbility::ClearCurrentProcess()
+void UAbility::ClearCurrentProcess(bool bInterrupt)
 {
-	CurrentProcess = nullptr;
+	if (CurrentProcess)
+	{
+		CurrentProcess->FinishTask(bInterrupt,true);
+		CurrentProcess = nullptr;
+	}
 	OnAbilityProcessCompleteDelegate.Unbind();
 }

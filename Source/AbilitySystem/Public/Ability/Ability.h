@@ -30,7 +30,7 @@ DECLARE_DYNAMIC_DELEGATE_OneParam(FOnAbilityProcessComplete, bool, bSuccess);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityComplete);
 
 UCLASS(Blueprintable)
-class ABILITYSYSTEM_API UAbility : public UProcessTask
+class UAbility : public UProcessTask
 {
 	GENERATED_BODY()
 
@@ -46,6 +46,8 @@ protected:
 
 	virtual UAbilityProcess* ActivateProcess();
 	virtual void ActivateAbilityProcessSequence();
+
+	FORCEINLINE bool IsActivating() { return bActivate; }
 
 	UFUNCTION()
 		void OnAbilityProcessComplete(bool bSuccess);
@@ -66,13 +68,10 @@ protected:
 private:
 	FORCEINLINE FProcessSequenceInfo GetNextProcessSequenceInfo();
 	void ResetAbiity();
-	void ClearCurrentProcess();
+	void ClearCurrentProcess(bool bInterrupt = false);
 
 	bool bActivate = false;
-	bool bContinue = true;
 	int32 CurrentProcessIndex = 0;
 	UAbilityProcess* CurrentProcess;
 	FOnAbilityProcessComplete OnAbilityProcessCompleteDelegate;
-
-	
 };

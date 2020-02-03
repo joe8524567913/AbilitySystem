@@ -66,7 +66,7 @@ void UEffectTask::ActivateTimePoints(int CurrentIndex)
 	}
 	else
 	{
-		FinishTask();
+		FinishTask(false,true);
 	}
 }
 
@@ -78,5 +78,5 @@ void UEffectTask::OnTimePointsReached(int CurrentIndex)
 
 void UEffectTask::EndEffectTask()
 {
-	FinishTask();
+	FinishTask(false,true);
 }

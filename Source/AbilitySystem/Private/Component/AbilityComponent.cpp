@@ -72,7 +72,7 @@ UAbility * UAbilityComponent::ActivateAbility(TSubclassOf<UAbility> AbilityClass
 	{
 		if (CurrentAbility->IsActivate())
 		{
-			CurrentAbility->Interrupt();
+			CurrentAbility->FinishTask(true,false);
 		}
 	}
 	CurrentAbility = FindAbilityByClass(AbilityClass);
