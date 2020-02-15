@@ -46,12 +46,12 @@ void FEffectInfoDetailsViewCustomizations::CustomizeChildren(TSharedRef<IPropert
 	EffectSlotPropertyHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FEffectInfo, EffectSlot));
 	TSharedPtr<IPropertyHandle> EffectClassPropertyHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FEffectInfo, EffectClass));
 	TSharedPtr<IPropertyHandle> LifePropertyHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FEffectInfo, Life));
-	IntervalTypePropertyHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FEffectInfo, bTimePoints));
+	IntervalTypePropertyHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FEffectInfo, ActivateType));
 	IntervalTimePropertyHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FEffectInfo, IntervalTime));
 	IntervalTimesPropertyHandle = StructPropertyHandle->GetChildHandle(GET_MEMBER_NAME_CHECKED(FEffectInfo, TimePoints));
 
-	FSimpleDelegate OnIntervalTypeChanged = FSimpleDelegate::CreateSP(this, &FEffectInfoDetailsViewCustomizations::OnIntervalTypeChanged);
-	IntervalTypePropertyHandle->SetOnPropertyValueChanged(OnIntervalTypeChanged);
+	//FSimpleDelegate OnIntervalTypeChanged = FSimpleDelegate::CreateSP(this, &FEffectInfoDetailsViewCustomizations::OnIntervalTypeChanged);
+	//IntervalTypePropertyHandle->SetOnPropertyValueChanged(OnIntervalTypeChanged);
 
 	SetEffectSlotNameList(EffectSlotNameList);
 

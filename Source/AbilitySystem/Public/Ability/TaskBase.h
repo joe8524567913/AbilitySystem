@@ -22,6 +22,17 @@ struct FTaskParams
 	TMap<FName, FAttributeName> Params;
 };
 
+UENUM()
+namespace EEffectTaskActivateType
+{
+	enum Type
+	{
+		ETCT_None UMETA(DisplayName = "None"),
+		ETCT_IntervalTime UMETA(DisplayName = "IntervalTime"),
+		ETCT_TimePoint UMETA(DisplayName = "TimePoint"),
+	};
+}
+
 USTRUCT()
 struct FEffectInfo
 {
@@ -37,7 +48,7 @@ struct FEffectInfo
 		float Life;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Effect")
-		bool bTimePoints;
+		TEnumAsByte<EEffectTaskActivateType::Type>ActivateType;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Effect")
 		float IntervalTime;
@@ -53,14 +64,14 @@ struct FEffectInfo
 };
 
 UCLASS()
-class UTaskBase : public UGameplayTask
+class ABILITYSYSTEM_API UTaskBase : public UGameplayTask
 {
 	GENERATED_BODY()
 
 public:
 	void Init(AActor* Caster, UAbilityBlackBoard* AbilityBlackBoard, FTaskParams InTaskParams);
 	void FinishInit();
-	void FinishTask(bool bInterrupt = false,bool bKill = false);
+	void FinishTask(bool bInterrupt = false, bool bKill = false);
 	virtual UWorld* GetWorld() const override { return Caster ? Caster->GetWorld() : nullptr; }
 
 	FORCEINLINE void AddToSubTaskMap(UTaskBase* Task) { SubTaskMap.Add(Task->GetFName(), Task); }
@@ -83,8 +94,11 @@ protected:
 	virtual void OnEnded() {}
 	virtual void OnInterrupt() {};
 
-	UFUNCTION(BlueprintImplementableEvent,meta = (DisplayName = "OnActivate"), Category = "TaskBase")
-		void K2_OnActivate(FTaskParams InTaskParams);
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnPreActivate"), Category = "TaskBase")
+		void K2_OnPreActivate(FTaskParams InTaskParams);
+
+	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnActivate"), Category = "TaskBase")
+		void K2_OnActivate();
 
 	UFUNCTION(BlueprintImplementableEvent, meta = (DisplayName = "OnEnded"), Category = "TaskBase")
 		void K2_OnEnded();
@@ -93,7 +107,7 @@ protected:
 		void K2_OnInterrupt();
 
 	UFUNCTION(BlueprintPure, Category = "Task")
-		FAttributes GetAttributes(FTaskParams InTaskParams, FName ParamName);
+		FAttributes GetAttributes(FTaskParams InTaskParams, FName ParamName, bool& bSuccess);
 
 	TArray<FEffectInfo> FindEffectInfo(const FEffectSlot EffectSlot);
 

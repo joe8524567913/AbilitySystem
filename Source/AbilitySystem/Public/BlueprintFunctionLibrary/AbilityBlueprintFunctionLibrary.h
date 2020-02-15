@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class UAbilityBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
+class ABILITYSYSTEM_API UAbilityBlueprintFunctionLibrary : public UBlueprintFunctionLibrary
 {
 	GENERATED_BODY()
 
@@ -159,6 +159,9 @@ inline ValueType UAbilityBlueprintFunctionLibrary::ACastTo(FAttributes Attribute
 {
 	PropertyType* Property = Cast<PropertyType>(Attribute.AttributeProperty);
 	bSuccess = Property;
-
-	return Property->GetPropertyValue(Attribute.AttributeAddress);
+	if (bSuccess)
+	{
+		return Property->GetPropertyValue(Attribute.AttributeAddress);
+	}
+	return ValueType();
 }

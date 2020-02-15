@@ -16,17 +16,17 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FAbilityProcessDelegate, uint8, Result);
 
 UCLASS(Blueprintable)
-class UAbilityProcess : public UProcessTask
+class ABILITYSYSTEM_API UAbilityProcess : public UProcessTask
 {
 	GENERATED_BODY()
 
 public:
 	static UAbilityProcess* ActivateProcess(UProcessTask* ParentTask, TSubclassOf<UAbilityProcess>AbilityProcessClass, TMap<FName, FAttributeName> ProcessParam, FOnAbilityProcessComplete InOnAbilityProcessComplete);
 
-	UFUNCTION(BlueprintCallable, Category = "AbilityProcess",meta = (BlueprintInternalUseOnly = "TRUE"))
-		static UAbilityProcess* ActivateProcess(UProcessTask* ParentTask,TSubclassOf<UAbilityProcess>AbilityProcessClass, TMap<FName, FAttributeName> ProcessParam);
+	UFUNCTION(BlueprintCallable, Category = "AbilityProcess", meta = (BlueprintInternalUseOnly = "TRUE"))
+		static UAbilityProcess* ActivateProcess(UProcessTask* ParentTask, TSubclassOf<UAbilityProcess>AbilityProcessClass, TMap<FName, FAttributeName> ProcessParam);
 
-	UFUNCTION(BlueprintCallable,meta = (AdvancedDisplay = "Result"), Category = "AbilityProcess")
+	UFUNCTION(BlueprintCallable, meta = (AdvancedDisplay = "Result"), Category = "AbilityProcess")
 		virtual void FinishProcess(bool bSuccess, uint8 Result = 0);
 
 	UPROPERTY(BlueprintAssignable)

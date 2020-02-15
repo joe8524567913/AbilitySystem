@@ -20,7 +20,7 @@ void UProcessTask::EndSubTasks(bool bInterrupt)
 	{
 		if (UTaskBase* TaskBase = Iter->Value)
 		{
-			TaskBase->FinishTask(bInterrupt,true);
+			TaskBase->FinishTask(bInterrupt, true);
 		}
 	}
 	SubTaskMap.Empty();

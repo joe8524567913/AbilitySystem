@@ -23,14 +23,14 @@ struct FProcessSequenceInfo
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "ProcessSequence")
 		TMap<FName, FAttributeName> AttributesList;
 
-	FORCEINLINE bool IsValid() { return AbilityProcessClass ? true : false; }
+	FORCEINLINE bool IsValid() { return AbilityProcessClass; }
 };
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FOnAbilityProcessComplete, bool, bSuccess);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityComplete);
 
 UCLASS(Blueprintable)
-class UAbility : public UProcessTask
+class ABILITYSYSTEM_API UAbility : public UProcessTask
 {
 	GENERATED_BODY()
 
@@ -61,7 +61,7 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Process")
 		bool bAutoActivateAbilitySequence = true;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Process")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Process")
 		TArray<FProcessSequenceInfo>ProcessSequence;
 
 
@@ -74,4 +74,6 @@ private:
 	int32 CurrentProcessIndex = 0;
 	UAbilityProcess* CurrentProcess;
 	FOnAbilityProcessComplete OnAbilityProcessCompleteDelegate;
+
+	
 };

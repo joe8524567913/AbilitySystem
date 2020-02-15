@@ -9,14 +9,19 @@
 void UEffectTask::OnActivate()
 {
 	LifeCountdown();
-	if (EffectInfo.bTimePoints)
+	switch (EffectInfo.ActivateType)
 	{
-		TimePoints = EffectInfo.TimePoints;
-		ActivateTimePoints(0);
-	}
-	else
-	{
-		ActivateInterval();
+	case EEffectTaskActivateType::ETCT_None:
+		break;
+	case EEffectTaskActivateType::ETCT_IntervalTime:
+		{
+			ActivateInterval();
+		}
+	case EEffectTaskActivateType::ETCT_TimePoint:
+		{
+			TimePoints = EffectInfo.TimePoints;
+			ActivateTimePoints(0);
+		}
 	}
 }
 
@@ -53,7 +58,7 @@ void UEffectTask::ActivateInterval()
 
 void UEffectTask::ActivateTimePoints(int CurrentIndex)
 {
-	if (CurrentIndex< TimePoints.Num())
+	if (CurrentIndex < TimePoints.Num())
 	{
 		int LastIndex = CurrentIndex - 1;
 		float DelayTime = LastIndex >= 0 ? TimePoints[CurrentIndex] - TimePoints[LastIndex] : TimePoints[CurrentIndex];
@@ -66,7 +71,7 @@ void UEffectTask::ActivateTimePoints(int CurrentIndex)
 	}
 	else
 	{
-		FinishTask(false,true);
+		FinishTask(false, true);
 	}
 }
 
@@ -78,5 +83,5 @@ void UEffectTask::OnTimePointsReached(int CurrentIndex)
 
 void UEffectTask::EndEffectTask()
 {
-	FinishTask(false,true);
+	FinishTask(false, true);
 }

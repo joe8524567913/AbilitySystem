@@ -14,7 +14,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAbilityEnded);
 
 
 UCLASS(BlueprintType, ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class UAbilityComponent : public UActorComponent
+class ABILITYSYSTEM_API UAbilityComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -29,6 +29,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
 
 public:
 	UFUNCTION(BlueprintCallable, Category = "AbilityComponent")
@@ -57,7 +58,7 @@ protected:
 	UFUNCTION()
 		void OnCurrentAbilityComplete();
 
-	TMap<FString,UAbility*> AbilityMap;
+	TMap<FString, UAbility*> AbilityMap;
 
 private:
 	FORCEINLINE virtual UAbilityBlackBoard* CreateAbilityBlackBoardTemplate();

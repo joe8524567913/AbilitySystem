@@ -12,7 +12,7 @@
  * 
  */
 UCLASS(Blueprintable)
-class UEffectTask : public UTaskBase
+class ABILITYSYSTEM_API UEffectTask : public UTaskBase
 {
 	GENERATED_BODY()
 

@@ -13,7 +13,7 @@
 class UAbilityBlackBoard;
 
 UCLASS(config = Game, defaultconfig)
-class UAbilitySettings : public UObject
+class ABILITYSYSTEM_API UAbilitySettings : public UObject
 {
 	GENERATED_BODY()
 

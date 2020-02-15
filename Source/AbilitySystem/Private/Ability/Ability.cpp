@@ -31,7 +31,7 @@ void UAbility::OnInterrupt()
 
 void UAbility::EndAbility()
 {
-	FinishTask(false,false);
+	FinishTask(false, false);
 }
 
 void UAbility::K2_ActivateAbilityProcessSequence()
@@ -47,7 +47,7 @@ UAbilityProcess* UAbility::ActivateProcess()
 		CurrentProcessIndex++;
 		OnAbilityProcessCompleteDelegate.BindUFunction(this, TEXT("OnAbilityProcessComplete"));
 		UAbilityProcess* InProcess = UAbilityProcess::ActivateProcess(this, ProcessSequenceInfo.AbilityProcessClass, ProcessSequenceInfo.AttributesList, OnAbilityProcessCompleteDelegate);
-		if (!InProcess||InProcess->IsPendingKill())
+		if (!InProcess || InProcess->IsPendingKill())
 		{
 			return nullptr;
 		}
@@ -97,7 +97,7 @@ void UAbility::ClearCurrentProcess(bool bInterrupt)
 {
 	if (CurrentProcess)
 	{
-		CurrentProcess->FinishTask(bInterrupt,true);
+		CurrentProcess->FinishTask(bInterrupt, true);
 		CurrentProcess = nullptr;
 	}
 	OnAbilityProcessCompleteDelegate.Unbind();

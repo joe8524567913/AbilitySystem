@@ -14,8 +14,9 @@ void UTaskBase::Init(AActor* InCaster, UAbilityBlackBoard* InAbilityBlackBoard, 
 
 void UTaskBase::FinishInit()
 {
+	K2_OnPreActivate(TaskParams);
 	OnActivate();
-	K2_OnActivate(TaskParams);
+	K2_OnActivate();
 }
 
 void UTaskBase::FinishTask(bool bInterrupt, bool bKill)
@@ -39,12 +40,12 @@ void UTaskBase::FinishTask(bool bInterrupt, bool bKill)
 void UTaskBase::ActivateEffectTask(FEffectSlot EffectSlot)
 {
 	UTaskBase * Task = this;
-	while (Task&&!Task->IsPendingKill())
+	while (Task && !Task->IsPendingKill())
 	{
 		TArray<FEffectInfo>EffectInfoList = Task->FindEffectInfo(EffectSlot);
 		if (EffectInfoList.Num())
 		{
-			for (FEffectInfo EffectInfo:EffectInfoList)
+			for (FEffectInfo EffectInfo : EffectInfoList)
 			{
 				if (EffectInfo.IsValid())
 				{
@@ -57,7 +58,7 @@ void UTaskBase::ActivateEffectTask(FEffectSlot EffectSlot)
 						EffectTask->FinishInit();
 					}
 				}
-				
+
 			}
 		}
 		Task = Task->GetParentTask();
@@ -67,7 +68,7 @@ void UTaskBase::ActivateEffectTask(FEffectSlot EffectSlot)
 TArray<FEffectInfo> UTaskBase::FindEffectInfo(const FEffectSlot EffectSlot)
 {
 	TArray<FEffectInfo>EffectInfoList;
-	for (FEffectInfo InEffectInfo:EffectList)
+	for (FEffectInfo InEffectInfo : EffectList)
 	{
 		if (InEffectInfo.EffectSlot == EffectSlot)
 		{
@@ -77,11 +78,17 @@ TArray<FEffectInfo> UTaskBase::FindEffectInfo(const FEffectSlot EffectSlot)
 	return EffectInfoList;
 }
 
-FAttributes UTaskBase::GetAttributes(FTaskParams InTaskParams, FName ParamName)
+FAttributes UTaskBase::GetAttributes(FTaskParams InTaskParams, FName ParamName,bool& bSuccess)
 {
 	TMap<FName, FAttributes> InAttributesList;
 	AttributeNameListConvertToAttributesList(InTaskParams.Params, InAttributesList);
-	return *InAttributesList.Find(ParamName);
+	bSuccess = InAttributesList.Num();
+
+	if (bSuccess)
+	{
+		return *InAttributesList.Find(ParamName);
+	}
+	return FAttributes();
 }
 
 void UTaskBase::AttributeNameListConvertToAttributesList(const TMap<FName, FAttributeName>& AttributeNameList, TMap<FName, FAttributes>& AttributesList)

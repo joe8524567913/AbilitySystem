@@ -12,7 +12,7 @@
  * 
  */
 UCLASS()
-class UProcessTask : public UTaskBase
+class ABILITYSYSTEM_API UProcessTask : public UTaskBase
 {
 	GENERATED_BODY()
 

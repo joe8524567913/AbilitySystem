@@ -24,7 +24,7 @@ void UAbilityComponent::BeginPlay()
 	Super::BeginPlay();
 
 	// ...
-	
+
 }
 
 
@@ -68,11 +68,11 @@ UAbility * UAbilityComponent::ActivateAbility(TSubclassOf<UAbility> AbilityClass
 	{
 		return nullptr;
 	}
-	if (CurrentAbility&&!CurrentAbility->IsPendingKill())
+	if (CurrentAbility && !CurrentAbility->IsPendingKill())
 	{
 		if (CurrentAbility->IsActivate())
 		{
-			CurrentAbility->FinishTask(true,false);
+			CurrentAbility->FinishTask(true, false);
 		}
 	}
 	CurrentAbility = FindAbilityByClass(AbilityClass);

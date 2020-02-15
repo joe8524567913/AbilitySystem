@@ -14,6 +14,7 @@ UAbilityProcess * UAbilityProcess::ActivateProcess(UProcessTask * ParentTask, TS
 	{
 		AbilityProcess->OnAbilityProcessComplete = InOnAbilityProcessComplete;
 		FTaskParams InTaskParams;
+		InTaskParams.Params = ProcessParam;
 		AbilityProcess->Init(ParentTask->GetCaster(), ParentTask->GetAbilityBlackBoard(), InTaskParams);
 		AbilityProcess->FinishInit();
 		return AbilityProcess;
@@ -27,7 +28,7 @@ UAbilityProcess* UAbilityProcess::ActivateProcess(UProcessTask* ParentTask, TSub
 	{
 		return nullptr;
 	}
-	
+
 	if (UAbilityProcess* AbilityProcess = NewAbilityTask<UAbilityProcess>(ParentTask, AbilityProcessClass))
 	{
 		FTaskParams InTaskParams;
@@ -51,5 +52,5 @@ void UAbilityProcess::FinishProcess(bool bSuccess, uint8 Result)
 	}
 	OnAbilityProcessComplete.ExecuteIfBound(bSuccess);
 	OnAbilityProcessComplete.Unbind();
-	FinishTask(false,true);
+	FinishTask(false, true);
 }
