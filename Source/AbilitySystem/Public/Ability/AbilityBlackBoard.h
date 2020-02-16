@@ -67,7 +67,10 @@ public:
 
 	UFUNCTION(BlueprintPure, Category = "AbilityBlackBoard")
 		float GetAttributeAsFloat(FAttributeName AttributeName, bool& bSuccess);
-
+	/*
+	UFUNCTION(BlueprintPure, Category = "AbilityBlackBoard")
+		FVector GetAttributeAsVector(FAttributeName AttributeName, bool& bSuccess);
+	*/
 	UFUNCTION(BlueprintPure, Category = "AbilityBlackBoard")
 		bool GetAttributeAsBool(FAttributeName AttributeName, bool& bSuccess);
 
@@ -94,6 +97,7 @@ public:
 	FORCEINLINE void AddAttributes(FAttributeName AttributeName, FAttributes Attributes) { AttributesList.Add(AttributeName.Attribute, Attributes); }
 	FORCEINLINE void AddAttributesByProperty(FAttributeName AttributeName, UProperty* Property, void * PropertyAddress,bool bCallBack = false);
 	template<typename ValueType, typename PropertyType>ValueType GetAttribute(FAttributeName AttributeName, bool& bSuccess);
+	template<typename ValueType>ValueType GetStructAttribute(FAttributeName AttributeName, bool& bSuccess);
 
 protected:
 	UPROPERTY(EditDefaultsOnly, Category = "AbilityBlackBoard")
@@ -114,4 +118,11 @@ inline ValueType UAbilityBlackBoard::GetAttribute(FAttributeName AttributeName,b
 {
 	FAttributes Attributes = *AttributesList.Find(AttributeName.Attribute);
 	return UAbilityBlueprintFunctionLibrary::ACastTo<ValueType, PropertyType>(Attributes, bSuccess);	 
+}
+
+template<typename ValueType>
+inline ValueType UAbilityBlackBoard::GetStructAttribute(FAttributeName AttributeName, bool& bSuccess)
+{
+	FAttributes Attributes = *AttributesList.Find(AttributeName.Attribute);
+	return UAbilityBlueprintFunctionLibrary::ACastToStruct<ValueType>(Attributes, bSuccess);
 }

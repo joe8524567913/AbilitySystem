@@ -31,7 +31,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "AbilityBlackBoard", CustomThunk, meta = (CustomStructureParam = "Value"))
 		static void SetFloatAttribute(UAbilityBlackBoard*AbilityBlackBoard, FAttributeName AttributeName, UFloatProperty*Value);
-
+	/*
+	UFUNCTION(BlueprintCallable, Category = "AbilityBlackBoard", CustomThunk, meta = (CustomStructureParam = "Value"))
+		static void SetVectorAttribute(UAbilityBlackBoard* AbilityBlackBoard, FAttributeName AttributeName, UFloatProperty* Value);
+	*/
 	UFUNCTION(BlueprintCallable, Category = "AbilityBlackBoard", CustomThunk, meta = (CustomStructureParam = "Value"))
 		static void SetNameAttribute(UAbilityBlackBoard*AbilityBlackBoard, FAttributeName AttributeName, UNameProperty*Value);
 
@@ -58,7 +61,10 @@ public:
 
 	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast), Category = "AbilityBlueprintFunctionLibrary")
 		static FString AttributesConvertToString(FAttributes Attribute, bool& bSuccess);
-
+	/*
+	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast), Category = "AbilityBlueprintFunctionLibrary")
+		static FVector AttributesConvertToVector(FAttributes Attribute, bool& bSuccess);
+	*/
 	UFUNCTION(BlueprintPure, meta = (BlueprintAutocast), Category = "AbilityBlueprintFunctionLibrary")
 		static UObject* AttributesConvertToObject(FAttributes Attribute, bool& bSuccess);
 
@@ -70,7 +76,8 @@ public:
 
 	template<typename ValueType>static void SetAttributes(FFrame& Stack,UAbilityBlackBoard*AbilityBlackBoard, FAttributeName AttributeName);
 
-	template<typename ValueType, typename PropertyType>static ValueType ACastTo(FAttributes AttributeProperty, bool& bSuccess);
+	template<typename ValueType, typename PropertyType>static ValueType ACastTo(FAttributes Attribute, bool& bSuccess);
+	template<typename ValueType>static ValueType ACastToStruct(FAttributes Attribute, bool& bSuccess);
 
 public:
 	DECLARE_FUNCTION(execSetBoolAttribute)
@@ -105,6 +112,14 @@ public:
 		P_FINISH;
 	}
 
+	DECLARE_FUNCTION(execSetVectorAttribute)
+	{
+		P_GET_OBJECT(UAbilityBlackBoard, AbilityBlackBoard);
+		P_GET_STRUCT(FAttributeName, AttributeName);
+		SetAttributes<UStructProperty>(Stack, AbilityBlackBoard, AttributeName);
+		P_FINISH;
+	}
+	
 	DECLARE_FUNCTION(execSetNameAttribute)
 	{
 		P_GET_OBJECT(UAbilityBlackBoard, AbilityBlackBoard);
@@ -165,3 +180,17 @@ inline ValueType UAbilityBlueprintFunctionLibrary::ACastTo(FAttributes Attribute
 	}
 	return ValueType();
 }
+
+template<typename ValueType>
+inline ValueType UAbilityBlueprintFunctionLibrary::ACastToStruct(FAttributes Attribute, bool& bSuccess)
+{
+	UStructProperty* Property = Cast<UStructProperty>(Attribute.AttributeProperty);
+	bSuccess = Property;
+	if (bSuccess)
+	{
+		return *Property->ContainerPtrToValuePtr<ValueType>(Attribute.AttributeAddress);
+	}
+	return ValueType();
+}
+
+

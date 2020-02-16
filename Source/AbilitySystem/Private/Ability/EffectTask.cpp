@@ -9,6 +9,7 @@
 void UEffectTask::OnActivate()
 {
 	LifeCountdown();
+
 	switch (EffectInfo.ActivateType)
 	{
 	case EEffectTaskActivateType::ETCT_None:
@@ -16,11 +17,13 @@ void UEffectTask::OnActivate()
 	case EEffectTaskActivateType::ETCT_IntervalTime:
 		{
 			ActivateInterval();
+			break;
 		}
 	case EEffectTaskActivateType::ETCT_TimePoint:
 		{
 			TimePoints = EffectInfo.TimePoints;
 			ActivateTimePoints(0);
+			break;
 		}
 	}
 }

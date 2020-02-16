@@ -32,7 +32,12 @@ FString UAbilityBlueprintFunctionLibrary::AttributesConvertToString(FAttributes 
 {
 	return ACastTo<FString, UStrProperty>(Attribute, bSuccess);
 }
-
+/*
+FVector UAbilityBlueprintFunctionLibrary::AttributesConvertToVector(FAttributes Attribute, bool& bSuccess)
+{
+	return ACastToStruct<FVector>(Attribute, bSuccess);
+}
+*/
 UObject * UAbilityBlueprintFunctionLibrary::AttributesConvertToObject(FAttributes Attribute, bool & bSuccess)
 {
 	return ACastTo<UObject*, UObjectProperty>(Attribute, bSuccess);

@@ -14,7 +14,12 @@ float UAbilityBlackBoard::GetAttributeAsFloat(FAttributeName AttributeName, bool
 {
 	return GetAttribute<float, UFloatProperty>(AttributeName, bSuccess);
 }
-
+/*
+FVector UAbilityBlackBoard::GetAttributeAsVector(FAttributeName AttributeName, bool& bSuccess)
+{
+	return GetStructAttribute<FVector>(AttributeName, bSuccess);
+}
+*/
 bool UAbilityBlackBoard::GetAttributeAsBool(FAttributeName AttributeName, bool& bSuccess)
 {
 	return GetAttribute<bool, UBoolProperty>(AttributeName, bSuccess);
